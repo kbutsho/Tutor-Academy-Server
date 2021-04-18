@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId;
 require('dotenv').config();
 
 const app = express()
@@ -33,6 +34,13 @@ client.connect(err => {
                 res.send(items);
             })
     });
+    //delete tutor as a product
+    app.delete('/deleteTutor/:id', (req, res) => {
+        tutorCollection.findOneAndDelete({ _id: ObjectId(req.params.id) })
+          .then(result => {
+            res.send(result.deletedCount > 0);
+          })
+      })
     // add review
     app.post('/addReview', (req, res) => {
         const newTutor = req.body;
